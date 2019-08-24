@@ -31,7 +31,7 @@ class MyReaderDb extends MyReader
 	 */
     private $_db;
 	/**
-	 * @var DB_ResultSet
+	 * @var DbResultSet
 	 */
     private $_rs;
 	private $_assoc;
