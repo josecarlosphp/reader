@@ -18,23 +18,22 @@
  * @see         https://github.com/josecarlosphp/reader
  * @copyright   2012-2019 José Carlos Cruz Parra
  * @license     https://www.gnu.org/licenses/gpl.txt GPL version 3
- * @desc        Class to read from a text file.
+ * @desc        Class to read from an Excel file (xls).
  */
 
 namespace josecarlosphp\reader;
 
-class MyReader_File extends MyReader
+class MyReaderXls extends MyReader
 {
-    protected $_length;
+    private $_rows;
     /**
 	 * Constructor
 	 *
-	 * @return FileReader
 	 */
-	function __construct($length = 1024)
+	function __construct()
     {
         parent::__construct();
-        $this->_length = $length;
+        $this->_reader = new Spreadsheet_Excel_Reader();
     }
     /**
 	 * Abre un fichero para su lectura
@@ -45,7 +44,13 @@ class MyReader_File extends MyReader
 	public function Open($filepath, $autoclose=false)
     {
         parent::Open($filepath, $autoclose);
-        return ($this->_reader = fopen($filepath, 'r')) ? true : false;
+        $error = '';
+        if($this->_reader->read($filepath, $error))
+        {
+            $this->_rows = array_values($this->_reader->sheets[0]['cells']);
+            return true;
+        }
+        return true;
     }
     /**
 	 * Lee una linea
@@ -54,8 +59,8 @@ class MyReader_File extends MyReader
 	 */
 	public function ReadRow()
     {
-        $r = fgets($this->_reader, $this->_length);
-        if($r !== false)
+        $r = isset($this->_rows[$this->_i]) ? $this->_rows[$this->_i] : false;
+        if($r)
         {
             $this->_i++;
             $this->_contador++;
@@ -69,12 +74,7 @@ class MyReader_File extends MyReader
 	 */
 	public function Close()
     {
-		if(is_resource($this->_reader))
-		{
-			return fclose($this->_reader);
-		}
-
-		return true;
+        return true;
     }
     /**
 	 * Posiciona en una fila a leer
@@ -83,53 +83,26 @@ class MyReader_File extends MyReader
 	 * @param int $whence
 	 * @return int
 	 */
-	public function Seek($offset, $whence=SEEK_SET)
+	public function Seek($offset, $whence = SEEK_SET)
     {
-		switch($whence)
-		{
-			case SEEK_SET:
-				$target_i = $offset;
-				$this->_i = 0;
-				fseek($this->_reader, 0, SEEK_SET);
-				break;
-			case SEEK_CUR:
-				$target_i = $this->_i + $offset;
-				if($offset < 0)
-				{
-					$this->_i = 0;
-					fseek($this->_reader, 0, SEEK_SET);
-				}
-				break;
-			default:
-				return false;
-		}
-
-		for($c=$this->_i; $c<$target_i; $c++)
-		{
-			if(!$this->ReadRow())
-			{
-				return false;
-			}
-		}
-
-		return true;
+        switch($whence)
+        {
+            case SEEK_SET:
+                $this->_i = $offset;
+                return true;
+            case SEEK_CUR:
+                $this->_i += $offset;
+                return true;
+        }
+        return false;
     }
     /**
-	 * Establece el parametro length
+	 * Establece la codificacion de caracteres de salida
 	 *
-	 * @param int $val
+	 * @param string $str
 	 */
-	public function SetLength($val)
+	public function SetOutputEncoding($str)
     {
-        $this->_length = $val;
-    }
-    /**
-	 * Obtiene el parametro length
-	 *
-	 * @return int
-	 */
-	public function GetLength()
-    {
-        return $this->_length;
+        $this->_reader->setOutputEncoding($str);
     }
 }

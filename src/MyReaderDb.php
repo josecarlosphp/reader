@@ -23,7 +23,7 @@
 
 namespace josecarlosphp\reader;
 
-class MyReader_DB extends MyReader
+class MyReaderDb extends MyReader
 {
 	private $_table;
 	/**

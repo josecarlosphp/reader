@@ -23,7 +23,7 @@
 
 namespace josecarlosphp\reader;
 
-class MyReader_CSV extends MyReader_File
+class MyReaderCsv extends MyReaderFile
 {
     private $_delimiter;
     private $_enclosure;

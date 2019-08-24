@@ -23,7 +23,7 @@
 
 namespace josecarlosphp\reader;
 
-class MyReader_XML extends MyReader
+class MyReaderXml extends MyReader
 {
     private $_encoding;
     private $_rows;
