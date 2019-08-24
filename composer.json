@@ -1,0 +1,21 @@
+{
+    "name": "josecarlosphp/reader",
+    "description": "PHP classes for read from different sources, mainly files.",
+    "keywords": [
+        "PHP", "reader", "file", "CSV"
+    ],
+    "homepage": "https://github.com/josecarlosphp/reader",
+    "type": "library",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "José Carlos Cruz Parra",
+            "homepage": "https://josecarlosphp.com/"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "josecarlosphp\\reader\\": "src/"
+        }
+    }
+}
