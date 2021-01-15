@@ -39,7 +39,7 @@ class MyReaderDb extends MyReader
 	 * Constructor
 	 *
 	 * @param string $table
-	 * @param DB_Connection $db
+	 * @param josecarlosphp\db\DbConnection $db
 	 * @param bool $assoc
 	 */
 	function __construct($table, $db, $assoc=true)
